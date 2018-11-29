@@ -26,6 +26,8 @@ from flask_marshmallow import Marshmallow # Order is important here!
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
+from app.schemas import tweets_schema, tweet_schema
+
 @api.route('/<int:id>')
 @api.response(404, 'Tweet not found')
 @api.param('id', 'The tweet unique identifier')
@@ -76,3 +78,7 @@ class TweetsResource(Resource):
             return tweet, 201
         else:
             return abort(422, "Tweet text can't be empty")
+
+    def get(self):
+        tweets = db.session.query(Tweet).all()
+        return tweets_schema.jsonify(tweets)
