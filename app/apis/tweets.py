@@ -79,6 +79,7 @@ class TweetsResource(Resource):
         else:
             return abort(422, "Tweet text can't be empty")
 
+    @api.marshal_list_with(json_tweet)
     def get(self):
         tweets = db.session.query(Tweet).all()
-        return tweets_schema.jsonify(tweets)
+        return tweets
